@@ -1,20 +1,120 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//React and React Native Imports
+import React from 'react';
 
-export default function App() {
+//Navigator Related Imports
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+//Utility Imports
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+//Screen Imports
+import WelcomeScreen from './src/screens/WelcomeScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import DoctorScreen from './src/screens/DoctorScreen';
+import BlogsScreen from './src/screens/BlogsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+import VideoPlayerScreen from './src/screens/VideoPlayerScreen';
+import GraphsScreen from './src/screens/GraphsScreen';
+
+//Local Helper Function Imports
+import { Colors } from './src/constants/color';
+
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const TabsNavigator = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: Colors.primary500,
+        tabBarInactiveTintColor: Colors.darkGrey,
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTitleStyle: { color: Colors.white },
+      }}
+    >
+      <Tab.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{
+          title: 'Nurturely Tots',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="DoctorScreen"
+        component={DoctorScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="medical" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="BlogsScreen"
+        component={BlogsScreen}
+        options={{
+          title: 'Blogs',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="documents" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="WelcomeScreen"
+        screenOptions={{
+          headerStyle: { backgroundColor: Colors.primary500 },
+          headerTintColor: Colors.white,
+        }}
+      >
+        <Stack.Screen
+          name="WelcomeScreen"
+          component={WelcomeScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TabsScreen"
+          component={TabsNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="VideoScreen"
+          component={VideoPlayerScreen}
+          options={{
+            title: "Today's Assignment",
+          }}
+        />
+        <Stack.Screen
+          name="GraphsScreen"
+          component={GraphsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
