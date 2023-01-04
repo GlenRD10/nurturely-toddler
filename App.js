@@ -1,10 +1,11 @@
 //React and React Native Imports
-import React from 'react';
+import React, { useState } from 'react';
 
-//Navigator Related Imports
+//React hooks or functions from external libraries
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { ApolloProvider } from '@apollo/client';
 
 //Utility Imports
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -17,9 +18,11 @@ import BlogsScreen from './src/screens/BlogsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import VideoPlayerScreen from './src/screens/VideoPlayerScreen';
 import GraphsScreen from './src/screens/GraphsScreen';
+import PhoneVerificationScreen from './src/screens/PhoneVerificationScreen';
 
 //Local Helper Function Imports
 import { Colors } from './src/constants/color';
+import { createAppolloClient } from './src/services/apollo/apolloClient';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,42 +82,51 @@ const TabsNavigator = () => {
 };
 
 export default App = () => {
+  const [client] = useState(createAppolloClient);
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="WelcomeScreen"
-        screenOptions={{
-          headerStyle: { backgroundColor: Colors.primary500 },
-          headerTintColor: Colors.white,
-        }}
-      >
-        <Stack.Screen
-          name="WelcomeScreen"
-          component={WelcomeScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TabsScreen"
-          component={TabsNavigator}
-          options={{
-            headerShown: false,
+    <ApolloProvider client={client}>
+      <NavigationContainer>
+        <Stack.Navigator
+          initialRouteName="WelcomeScreen"
+          screenOptions={{
+            headerStyle: { backgroundColor: Colors.primary500 },
+            headerTintColor: Colors.white,
           }}
-        />
-        <Stack.Screen
-          name="VideoScreen"
-          component={VideoPlayerScreen}
-          options={{
-            title: "Today's Assignment",
-          }}
-        />
-        <Stack.Screen
-          name="GraphsScreen"
-          component={GraphsScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        >
+          <Stack.Screen
+            name="WelcomeScreen"
+            component={WelcomeScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PhoneAuth"
+            component={PhoneVerificationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TabsScreen"
+            component={TabsNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="VideoScreen"
+            component={VideoPlayerScreen}
+            options={{
+              title: "Today's Assignment",
+            }}
+          />
+          <Stack.Screen
+            name="GraphsScreen"
+            component={GraphsScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ApolloProvider>
   );
 };

@@ -9,7 +9,7 @@ export default WelcomeScreen = () => {
   const navigation = useNavigation();
 
   const buttonHandler = () => {
-    navigation.navigate('TabsScreen');
+    navigation.navigate('PhoneAuth');
   };
 
   return (
